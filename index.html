@@ -1,0 +1,203 @@
+<DOCTYPE html> 
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Task number 6</title>
+        <link rel="stylesheet" href="DefaultTask6.css"> 
+    </head>
+    <body class="default">
+<div class="text"> Задача 6</div>
+        <table class="table"> 
+          <tr>
+              <td>
+                  <p class="text2">
+                      Код программы:</br>
+Файл Mainpianino.java</br>
+import java.io.IOException;</br>
+import java.util.Objects; </br>
+
+class InvalidKeyException extends Exception { </br>
+    public InvalidKeyException(String message) { </br>
+        super(message); </br>
+    } </br>
+} </br>
+
+class InvalidPedalException extends Exception { </br>
+    public InvalidPedalException(String message) { </br>
+        super(message); </br>
+    } </br>
+} </br>
+
+class Key { </br>
+    private String note; </br>
+
+    public Key(String note) throws IllegalArgumentException { </br>
+        if (note == null || note.isEmpty()) { </br>
+            throw new IllegalArgumentException("Значение ноты не может быть пустым."); </br>
+        } </br>
+        this.note = note; </br>
+    } </br>
+
+    public void press() { </br>
+        System.out.println("Нажата клавиша с нотой: " + note); </br>
+    } </br>
+
+    @Override </br>
+    public boolean equals(Object o) { </br>
+        if (this == o) </br>
+            return true; </br>
+        if (o == null || getClass() != o.getClass()) </br>
+            return false; </br>
+        Key key = (Key) o; </br>
+        return Objects.equals(note, key.note); </br>
+    } </br>
+
+    @Override </br>
+    public int hashCode() { </br>
+        return Objects.hash(note); </br>
+    } </br>
+
+    @Override </br>
+    public String toString() { </br>
+        return "Key{" + </br>
+                "note='" + note + '\'' + </br>
+                '}'; </br>
+    } </br>
+} </br>
+
+class Pedal { </br>
+    private String type; </br>
+
+    public Pedal(String type) throws IllegalArgumentException { </br>
+        if (type == null || type.isEmpty()) { </br>
+            throw new IllegalArgumentException("Тип педали не может быть пустым."); </br>
+        } </br>
+        this.type = type; </br>
+    } </br>
+
+    public void press() { </br>
+        System.out.println("Нажата педаль: " + type); </br>
+    } </br>
+
+    @Override </br>
+    public boolean equals(Object o) { </br>
+        if (this == o) </br>
+            return true; </br>
+        if (o == null || getClass() != o.getClass()) </br>
+            return false; </br>
+        Pedal pedal = (Pedal) o; </br>
+        return Objects.equals(type, pedal.type); </br>
+    } </br>
+
+    @Override </br>
+    public int hashCode() { </br>
+        return Objects.hash(type); </br>
+    } </br>
+
+    @Override </br>
+    public String toString() { </br>
+        return "Pedal{" + </br>
+                "type='" + type + '\'' + </br>
+                '}'; </br>
+    } </br>
+} </br>
+ 
+class Piano { </br>
+    private Key[] keys; </br>
+    private Pedal[] pedals; </br>
+    public Piano(Key[] keys, Pedal[] pedals) throws IOException { </br>
+        if (keys == null || pedals == null) { </br>
+            throw new IOException("Не удалось создать пианино: отсутствуют клавиши или   педали."); </br>
+        } </br>
+        this.keys = keys; </br>
+        this.pedals = pedals; </br>
+    } </br>
+    public void tune() { </br>
+        System.out.println("Пианино настроено."); </br>
+    } </br>
+    public void play() { </br>
+        System.out.println("Игра на пианино."); </br>
+        for (Key key : keys) { </br>
+            key.press(); </br>
+        } </br>
+    } </br>
+    public void pressKey(int index) throws InvalidKeyException { </br>
+        if (index < 0 || index >= keys.length) { </br>
+            throw new InvalidKeyException("Нет клавиши с индексом: " + index); </br>
+        } </br> 
+        keys[index].press(); </br>
+    } </br>
+    public void pressPedal(int index) throws InvalidPedalException { </br>
+        if (index < 0 || index >= pedals.length) { </br>
+            throw new InvalidPedalException("Нет педали с индексом: " + index); </br>
+        } </br>
+        pedals[index].press(); </br>
+    } </br>
+    @Override </br>
+    public boolean equals(Object o) { </br>
+        if (this == o) </br>
+            return true; </br>
+        if (o == null || getClass() != o.getClass()) </br>
+            return false; </br>
+        Piano piano = (Piano) o; </br>
+        return Objects.equals(keys, piano.keys) && Objects.equals(pedals, </br> piano.pedals); </br>
+    } </br>
+    @Override </br>
+    public int hashCode() { </br>
+        return Objects.hash(keys, pedals); </br>
+    } </br>
+    @Override </br>
+    public String toString() { </br>
+        return "Piano{" + </br>
+                "keys=" + keys.length + </br>
+                ", pedals=" + pedals.length + </br>
+                '}'; </br>
+    } </br>
+} </br>
+public class Mainpianino { </br>
+    public static void main(String[] args) { </br>
+        try { </br>
+            Key[] keys = { new Key("До"), new Key("Ре"), new Key("Ми"), new Key("Фа") </br> }; </br>
+            Pedal[] pedals = { new Pedal("Правая"), new Pedal("Левая") }; </br>
+            Piano piano = new Piano(keys, pedals); </br>
+            piano.tune(); </br>
+            piano.play(); </br>
+
+            piano.pressKey(1);  </br>
+            piano.pressPedal(0); </br>
+            piano.pressKey(10); </br>
+
+        } catch (InvalidKeyException | InvalidPedalException e) { </br>
+            System.err.println("Ошибка: " + e.getMessage()); </br>
+        } catch (IllegalArgumentException e) { </br>
+            System.err.println("Ошибка: " + e.getMessage()); </br>
+        } catch (IOException e) { </br>
+            System.err.println("Ошибка ввода/вывода: " + e.getMessage()); </br>
+        } catch (OutOfMemoryError e) { </br>
+            System.err.println("Ошибка: недостаточно памяти для выполнения операции.");</br>
+        } </br>
+    } </br>
+} </br>
+                  
+                  
+                  
+                  </p>
+              </td>
+          </tr>
+<tr> 
+    <td>
+    <p class="text"> Скриншот результата </p>
+    <img class="img" src="https://github.com/newsadness/Task-number-2/blob/main/2.png?raw=true">
+    </td>
+</tr>
+          <tr>
+             <td> 
+                 <a href="https://newsadness.github.io/1st-week/"> 
+                   <button class="button"> назад </button> 
+                 </a> 
+            </td>
+          </tr>
+        </table> 
+    </body>
+</html>
+</DOCTYPE>
